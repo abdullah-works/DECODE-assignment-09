@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:omdb_api_app/models/movie_blueprint.dart';
 import 'package:omdb_api_app/utility/constants.dart';
 import 'package:http/http.dart' as http;
@@ -113,7 +114,72 @@ class _MovieSearchScreenState extends State<MovieSearchScreen> {
             StreamBuilder(
                 stream: streamController.stream,
                 builder: ((context, snapshot) {
-                  // will handle all the events cases
+                  if (snapshot.data == Constants.Loading) {
+                    return const Center(
+                      heightFactor: 5,
+                      child: SpinKitFadingCircle(
+                        color: Colors.black,
+                      ),
+                    );
+                  }
+
+                  if (snapshot.data == Constants.Error) {
+                    return const Center(
+                      heightFactor: 15,
+                      child: Text(
+                        'Something went wrong!',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  }
+
+                  if (snapshot.data == Constants.NotFound) {
+                    return const Center(
+                      heightFactor: 15,
+                      child: Text(
+                        'Movie Not Found!',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  }
+
+                  if (snapshot.data == Constants.Initial) {
+                    return const Center(
+                      heightFactor: 15,
+                      child: Text(
+                        'Enter a Movie Name',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  }
+
+                  if (snapshot.data == Constants.Found) {
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: 250,
+                            height: 400,
+                            child: Image.network(movie!.poster!),
+                          ),
+                          const Divider(),
+                          Text(
+                            movie!.title!,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                   return const SizedBox.shrink();
                 })),
           ],
