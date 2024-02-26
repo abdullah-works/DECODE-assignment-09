@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:omdb_api_app/models/movie_blueprint.dart';
+import 'package:omdb_api_app/screens/movie_details_screen.dart';
 import 'package:omdb_api_app/utility/constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -163,21 +164,17 @@ class _MovieSearchScreenState extends State<MovieSearchScreen> {
                   }
 
                   if (snapshot.data == Constants.Found) {
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: 250,
-                            height: 400,
-                            child: Image.network(movie!.poster!),
-                          ),
-                          const Divider(),
-                          Text(
-                            movie!.title!,
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
+                    return Center(
+                      heightFactor: 15,
+                      child: TextButton.icon(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return MovieDetailsScreen(movie: movie!);
+                            }));
+                          },
+                          icon: const Icon(Icons.arrow_forward),
+                          label: const Text('View Movie Details')),
                     );
                   }
                   return const SizedBox.shrink();
